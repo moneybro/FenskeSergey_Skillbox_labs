@@ -7,6 +7,15 @@ namespace Lab001_001_Hello_world
     {
         static void Main(string[] args)
         {
+            //Program p = new Program();
+            //p.DoWorklab1();
+
+            //Lab002_001_Format_view.DoWorklab2();
+            Lab002_001_Format_view.DoWorklab2_Interpolation();
+        }
+
+        void DoWorklab1()
+        {
             WriteLine("Введите 1 для HW через WriteLine, 2 - вывод HW через Write");
             string choos = ReadLine();
             switch (choos)
@@ -23,6 +32,7 @@ namespace Lab001_001_Hello_world
             }
             ReadKey();
         }
+
         /// <summary>
         /// метод для вывода через WriteLine
         /// </summary>
