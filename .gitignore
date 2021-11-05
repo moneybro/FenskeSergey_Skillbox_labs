@@ -810,3 +810,5 @@ FodyWeavers.xsd
 /4.1_Исходники/Lesson_01/HelloWorldConsoleApp/Program.cs
 /4.1_Исходники/Lesson_01/HelloWorldConsoleApp/HelloWorldConsoleApp.csproj
 /4.1_Исходники/Lesson_01/HelloWorldConsoleApp/App.config
+/EnterValidator/EnterValidator.csproj
+/EnterValidator/Program.cs

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using static System.Console;
 
 namespace Homework_Theme_04
 {
@@ -90,7 +92,7 @@ namespace Homework_Theme_04
             // 
             // Справка: https://ru.wikipedia.org/wiki/Треугольник_Паскаля
             #endregion
-            CountPascalTreangle(9);
+            //CountPascalTreangle(9);
 
             #region Задание 3.1. Умножение матрицы на число.
             // 
@@ -110,6 +112,7 @@ namespace Homework_Theme_04
             //      |  5  3  1  |   | 25  15   5  |
             //
             #endregion
+            matrixMultiplicationByNumber();
 
             #region Задание 3.2. Сложение и вычитание матриц
             // ** Задание 3.2
@@ -212,13 +215,13 @@ namespace Homework_Theme_04
             Console.OutputEncoding = Encoding.GetEncoding("utf-8");
 
             List<MonthAcc> year = new List<MonthAcc>();
-            decimal[] incomes = new decimal[] { 100000, 120000, 80000, 70000, 100000, 200000, 130000, 150000, 190000, 110000, 150000, 100000};
+            decimal[] incomes = new decimal[] { 100000, 120000, 80000, 70000, 100000, 200000, 130000, 150000, 190000, 110000, 150000, 100000 };
             decimal[] expenses = new decimal[] { 80000, 90000, 70000, 70000, 80000, 120000, 140000, 65000, 90000, 70000, 120000, 80000 };
             decimal[] profit = new decimal[12];
             decimal[] forWork = new decimal[12];        // промежуточный массив, чтобы выполнить сортировку по доходности, но не потерять индексы
             int[] indexesMins = new int[3];         // индексы (месяцы) минимумов
             int[] indexesPositives = new int[12];   // индексы доходных месяце
-            decimal[,] minsAndPositives = new decimal[2,12]; // минимумы и отрицательные доходы. в строке 0 - минимумы, в 1 - отрицательные
+            decimal[,] minsAndPositives = new decimal[2, 12]; // минимумы и отрицательные доходы. в строке 0 - минимумы, в 1 - отрицательные
 
             Console.WriteLine("Задание 1. Финансовый учет.");
             Console.WriteLine("Выберете вариант отчета:");
@@ -240,8 +243,8 @@ namespace Homework_Theme_04
                 default:
                     break;
             }
-            
-            Console.WriteLine($"{"Месяц",6} {"Доход, тыс. руб.",21} {"Расход, тыс. руб.",21} {"Прибыль, тыс. руб.", 21}");
+
+            Console.WriteLine($"{"Месяц",6} {"Доход, тыс. руб.",21} {"Расход, тыс. руб.",21} {"Прибыль, тыс. руб.",21}");
             for (int i = 0; i < 12; i++)
             {
                 //year.Add(new MonthAcc() { MonthAccNumber = i, income = incomes[i], expense = expenses[i], profit = incomes[i] - expenses[i] });
@@ -317,7 +320,7 @@ namespace Homework_Theme_04
             Console.WriteLine(")");
             Console.ReadKey();
         }
-        
+
 
         /// <summary>
         /// хотел сделать класс с хранением данных одного месяца, но не получилось реализовать сортировщики по разным полям класса в списке (List<T>). отдельно сортировщики работают, но сделать, чтобы сортировка была по нужному полю при передаче параметра не удалось. сложные делигаты
@@ -359,7 +362,7 @@ namespace Homework_Theme_04
         #endregion
 
         #region Задание 2. Треугольник Паскаля (реализация)
-        
+
         /// <summary>
         /// Метод строит треугольник Паскаля с помощью двух вложенных циклов с постусловием. Выбран именно этот тип цикла потому, что требуется хотя бы одна итерация.
         /// Задание решается в 2 этапа:
@@ -391,7 +394,7 @@ namespace Homework_Theme_04
                     }
                     else
                     {
-                        storage[n][i] = storage[n - 1][i - 1] + storage[n-1][i]; // вычисляется текущий элемент треугольника как сумма элементов "над ним" (предыдущая строка, индексы i-1 + i) 
+                        storage[n][i] = storage[n - 1][i - 1] + storage[n - 1][i]; // вычисляется текущий элемент треугольника как сумма элементов "над ним" (предыдущая строка, индексы i-1 + i) 
                         strLen[n] += storage[n][i].ToString().Length; // увеличиваем длину строки на длину элемента в символов
 
                         // проверяем максимальную длину элемента в символах и сохраняем ее если она максимальная
@@ -413,7 +416,7 @@ namespace Homework_Theme_04
             for (int i = 0; i < n; i++) // цикл перебова строк массива
             {
                 try
-                {   
+                {
                     int currentStringWithSpaces = (elMaxLength * (storage[i].Length - 1) + 1); // длина текущей строки, опеределяется как количество элементов в текущей строке минус 1 умножить на максимальную длину максимального элемента треугольника плюс один, потому что после последнего элемента не выводим пробелы
                     offset = maxStringLenghtWithSpaces / 2 - (currentStringWithSpaces / 2); // определяем сдвиг как половина длины максимально длинной строки - половина длины текущей строки
                     Console.CursorLeft = offset; // сдвигаем курсов
@@ -430,13 +433,167 @@ namespace Homework_Theme_04
                     //Console.WriteLine("максимальная длина строки:{0}", maxStringLenghtWithSpaces);
                     //Console.WriteLine("отступ:{0}", offset);
                 }
-                
+
             }
             Console.WriteLine();
             Console.ReadKey();
             CountPascalTreangle(++zadanie); // перезапуск метода с количеством шагов + 1 к предыдущему значению
         }
 
+
+        #endregion
+
+        #region Задание 3.1. Умножение матрицы на число.
+
+        static void matrixMultiplicationByNumber()
+        {
+            Clear();
+            int arrStringItemsCount, arrColumnsCount, multiplier, multiplierCharsCount, randomLimit;
+            int[,] sourceArr, targetArr;
+            string el;
+            WriteLine("Введите количество строк матрицы (можно много): ");
+            arrStringItemsCount = getValidIntFromLine();
+            WriteLine("Введите количество столбцов матрицы (желательно не очень много, чтобы за экран не убегало): ");
+            arrColumnsCount = getValidIntFromLine();
+            WriteLine("Введите множитель матрицы: ");
+            multiplier = getValidIntFromLine();
+            WriteLine("Введите лимит рандомайзера (от - лимит до лимит): ");
+            randomLimit = getValidIntFromLine();
+            WriteLine();
+            //arrStringItemsCount = 5;
+            //arrColumnsCount = 5;
+            //multiplier = 99;
+
+            WriteLine($"Размер массива: строк={arrStringItemsCount} столбцов={arrColumnsCount}. Множитель={multiplier}. Лимит(-{randomLimit}, {randomLimit})");
+            WriteLine();
+            multiplierCharsCount = multiplier.ToString().Length;
+            sourceArr = new int[arrStringItemsCount, arrColumnsCount];
+            targetArr = new int[arrStringItemsCount, arrColumnsCount];
+            int maxResElementWidth, maxResElement = 0, sourceMatrixColumnWidth;
+            bool maxElIsNegative = false;
+
+            Random random = new Random();
+            
+            // заполнение матриц, определение максимального элемента в рез-щей матрице, чтобы потом взять его длину в символах
+            for (int i = 0; i < arrStringItemsCount; i++)
+            {
+                for (int j = 0; j < arrColumnsCount; j++)
+                {
+                    //sourceArr[i, j] = -100;
+                    sourceArr[i, j] = random.Next(-randomLimit, randomLimit);
+
+                    targetArr[i, j] = sourceArr[i, j] * multiplier;
+                    if (maxResElement < Math.Abs(targetArr[i,j]))   // максимальное число по модулю
+                    {
+                        maxResElement = Math.Abs(targetArr[i, j]);  // запоминаем максимальное число
+                        maxElIsNegative = true;                     // максимальное число по модулю было отрицательным
+                    }
+                }
+            }
+
+            maxResElementWidth = maxElIsNegative ? maxResElement.ToString().Length + 2 : maxResElement.ToString().Length + 1;   // длина в символах максимального элемента рез-щего массива и если элемент был отрицательный, то добавляем к длине 1 для знака. также один знак для пробела
+            sourceMatrixColumnWidth = randomLimit.ToString().Length + 2; // длина максимального случайного элемента в символах
+            string separator = " * " + multiplier.ToString() + " = ";   // разделитель выводит множитель матрицы
+            
+            // вывод матриц
+            for (int i = 0; i < arrStringItemsCount; i++)
+            {
+                int matrix1Width = 2 + arrColumnsCount * sourceMatrixColumnWidth + 1; // 2- для "| ", потом количество столбцов на максимальную длину элемента + знак + пробел (4 - потому что числа выбираются из диапазона от -10 до 10, то есть максимальная длина - 2, + знак + пробел)
+                int matrix2Offset = matrix1Width + separator.Length;
+                
+                Write("| ");
+
+                if (i != arrStringItemsCount / 2)
+                {
+                    separator = new string(' ', separator.Length);
+                }
+                else
+                {
+                    separator = " * " + multiplier.ToString() + " = ";
+                }
+
+                for (int j = 0; j < arrColumnsCount; j++)
+                {
+                    string matrix1Separator = (j == (arrColumnsCount - 1)) ? "|" : "";
+                    string matrix2Separator = (j == 0) ? "|" : "";
+
+                    el = (sourceArr[i, j] >= 0 ? " " + sourceArr[i, j].ToString() : sourceArr[i, j].ToString());
+
+                    Write(el); // вывод исходного массива
+                    //Thread.Sleep(100);
+
+                    CursorLeft = matrix1Width - 1; 
+                    Write(matrix1Separator + separator);    // вывод верт скобки + множителя матрицы
+
+                    try
+                    {
+                        int elMatrix2Offset;
+                        if (j == 0)
+                        {
+                            elMatrix2Offset = matrix2Offset + j * maxResElementWidth; 
+                        }
+                        else
+                        {
+                            elMatrix2Offset = matrix2Offset + j * maxResElementWidth + 1; // если не первый элемент рез-щей матрицы, то добавляем к сдвигу расстояние для вертикальной скобки и первого пробела
+                        }
+                        CursorLeft = elMatrix2Offset;
+                    }
+                    catch
+                    {
+                        //SetCursorPosition(0, arrStringItemsCount + 1);
+                    }
+                    el = (targetArr[i, j] >= 0 ? " " + targetArr[i, j].ToString() : targetArr[i, j].ToString()); // если элемент положительный, то вместо знака добавляем пробел
+
+                    Write($"{matrix2Separator} {el}");  // вывод вертикальной скобки и элемента рез-щей матрицы
+                    CursorLeft = 2 + (j + 1) * sourceMatrixColumnWidth;       // отступ для очередного элемента строки массива
+                }
+                try
+                {
+                    CursorLeft = matrix2Offset + arrColumnsCount * (maxResElementWidth) + 1;    // отступ для отрисовки закрывающей вертикальной скобки рез-щей матрицы
+                }
+                catch
+                {
+                    // защита от ошибки если вдруг матрицы будут слишком большие и сдвиг будет больше ширины окна консоли
+                }
+                WriteLine($" |");
+            }
+
+            ReadKey();
+            matrixMultiplicationByNumber();
+        }
+
+        /// <summary>
+        /// Метод предназначен для обеспечения валидности ввода целочисленных значений
+        /// </summary>
+        /// <returns></returns>
+        static int getValidIntFromLine()
+        {
+            int result;
+            bool needClean = false;
+            while (true)
+            {
+                string enter = ReadLine();
+                bool success = int.TryParse(enter, out result);
+                if (success)
+                {
+                    if (needClean)
+                    {
+                        SetCursorPosition(0, CursorTop);
+                        Write(new string(' ', WindowWidth));
+                        SetCursorPosition(0, --CursorTop);
+                    }
+                    return result;
+                }
+                else
+                {
+                    Write("Неверный ввод. Повторите");
+                    SetCursorPosition(0,--CursorTop);
+                    Write(new string(' ', WindowWidth));
+                    SetCursorPosition(0, --CursorTop);
+                    needClean = true;
+                }
+            }
+        }
 
         #endregion
     }
