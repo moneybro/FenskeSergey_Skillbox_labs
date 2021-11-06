@@ -63,7 +63,7 @@ namespace Homework_Theme_04
             // Худшая прибыль в месяцах: 7, 4, 1, 5, 12
             // Месяцев с положительной прибылью: 10
             #endregion
-            //Task1_FinancialAccounting();
+            Task1_FinancialAccounting();
 
             #region Задание 2. Треугольник Паскаля
             // * Задание 2
@@ -112,7 +112,7 @@ namespace Homework_Theme_04
             //      |  5  3  1  |   | 25  15   5  |
             //
             #endregion
-            matrixMultiplicationByNumber();
+            //matrixMultiplicationByNumber();
 
             #region Задание 3.2. Сложение и вычитание матриц
             // ** Задание 3.2
@@ -169,9 +169,9 @@ namespace Homework_Theme_04
                 drob = (float)Math.Round(random2.NextDouble(), 2);
                 op1 = cel + drob;
                 result = op1 - op2;
-                Console.WriteLine($"{op1} - {op2} = {result}");
+                WriteLine($"{op1} - {op2} = {result}");
             }
-            Console.ReadKey();
+            ReadKey();
         }
         #endregion
 
@@ -212,22 +212,30 @@ namespace Homework_Theme_04
             #endregion
 
 
-            Console.OutputEncoding = Encoding.GetEncoding("utf-8");
+            OutputEncoding = Encoding.GetEncoding("utf-8");
 
             List<MonthAcc> year = new List<MonthAcc>();
-            decimal[] incomes = new decimal[] { 100000, 120000, 80000, 70000, 100000, 200000, 130000, 150000, 190000, 110000, 150000, 100000 };
-            decimal[] expenses = new decimal[] { 80000, 90000, 70000, 70000, 80000, 120000, 140000, 65000, 90000, 70000, 120000, 80000 };
+            //decimal[] incomes = new decimal[] { 100000, 120000, 80000, 70000, 100000, 200000, 130000, 150000, 190000, 110000, 150000, 100000 };
+            //decimal[] expenses = new decimal[] { 100000, 90000, 1800000, 70000, 80000, 120000, 140000, 65000, 90000, 70000, 120000, 80000 };
+            //decimal[] expenses = new decimal[] { 80000, 90000, 70000, 70000, 80000, 120000, 140000, 65000, 90000, 70000, 120000, 80000 };
+
+            //decimal[] incomes = new decimal[] { 00000, 20000, -20000, -30000, 00000, 100000, 30000, 50000, 90000, 10000, 50000, 00000 };
+            //decimal[] expenses = new decimal[] { 50000, 70000, 30000, 20000, 50000, 150000, 80000, 100000, 140000, 60000, 100000, 50000 };
+
+            decimal[] incomes = new decimal[] { 2, 3, 2, 3, 2, 3, 1, 3, 3, 2, 1, 2 };
+            decimal[] expenses = new decimal[] { 3, 2, 3, 3, 1, 2, 3, 3, 1, 3, 2, 1 };
+
             decimal[] profit = new decimal[12];
             decimal[] forWork = new decimal[12];        // промежуточный массив, чтобы выполнить сортировку по доходности, но не потерять индексы
-            int[] indexesMins = new int[3];         // индексы (месяцы) минимумов
+            decimal[] minProfitValues = new decimal[3]; // для хранения 3 минимальных прибылей
+            int[] indexesMins = new int[12];         // индексы (месяцы) минимумов
             int[] indexesPositives = new int[12];   // индексы доходных месяце
-            decimal[,] minsAndPositives = new decimal[2, 12]; // минимумы и отрицательные доходы. в строке 0 - минимумы, в 1 - отрицательные
 
-            Console.WriteLine("Задание 1. Финансовый учет.");
-            Console.WriteLine("Выберете вариант отчета:");
-            Console.WriteLine("1 - Данные из задания (по умолчанию)");
-            Console.WriteLine("2 - Сгенерировать данные");
-            char choos = Console.ReadKey().KeyChar;
+            WriteLine("Задание 1. Финансовый учет.");
+            WriteLine("Выберете вариант отчета:");
+            WriteLine("1 - Данные из задания (по умолчанию)");
+            WriteLine("2 - Сгенерировать данные");
+            char choos = ReadKey().KeyChar;
             switch (choos)
             {
                 case '1':
@@ -243,82 +251,85 @@ namespace Homework_Theme_04
                 default:
                     break;
             }
-
-            Console.WriteLine($"{"Месяц",6} {"Доход, тыс. руб.",21} {"Расход, тыс. руб.",21} {"Прибыль, тыс. руб.",21}");
+            CursorLeft = 0;
+            WriteLine($"{"Месяц",6} {"Доход, тыс. руб.",21} {"Расход, тыс. руб.",21} {"Прибыль, тыс. руб.",21}");
+            
+            
             for (int i = 0; i < 12; i++)
             {
                 //year.Add(new MonthAcc() { MonthAccNumber = i, income = incomes[i], expense = expenses[i], profit = incomes[i] - expenses[i] });
                 profit[i] = incomes[i] - expenses[i];
-                //Console.WriteLine($"{ i + 1, 6} {incomes[i], 21}{expenses[i],21}{profit[i],21}");
-                //Console.WriteLine($"{ i + 1,6} {incomes[i],21:C2}{expenses[i],21:C2}{profit[i],21:C2}");
-                Console.WriteLine($"{ i + 1,6} {incomes[i],21:N2}{expenses[i],21:N2}{profit[i],21:N2}");
-                //Console.WriteLine("{0} {1}", (i+1).ToString("G"), incomes[i].ToString("C2"));
+                //WriteLine($"{ i + 1, 6} {incomes[i], 21}{expenses[i],21}{profit[i],21}");
+                //WriteLine($"{ i + 1,6} {incomes[i],21:C2}{expenses[i],21:C2}{profit[i],21:C2}");
+                WriteLine($"{ i + 1,6} {incomes[i],21:N2}{expenses[i],21:N2}{profit[i],21:N2}");
+                //WriteLine("{0} {1}", (i+1).ToString("G"), incomes[i].ToString("C2"));
 
-                //Console.WriteLine($"{year.Where(y => y.monthNumber == i).FirstOrDefault().income}");
+                //WriteLine($"{year.Where(y => y.monthNumber == i).FirstOrDefault().income}");
                 forWork[i] = profit[i];
+
             }
-            Console.WriteLine();
             Array.Sort(forWork);
-
-            // сортированный по возрастанию прибылей временный массив, применялось для отладки
-            //foreach (var item in forWork)
-            //{
-            //    Console.WriteLine(item);
-            //}
-
-            // заполняем массив минимальных прибылей (3 месяца) и заодно ищем положительные прибыли и заполняем массив положительными прибылями
+            List<decimal> unikalnye = new List<decimal>(); 
             for (int i = 0; i < 12; i++)
             {
-                if (i < 3)
-                {
-                    minsAndPositives[0, i] = forWork[i];
-                }
+                if (!unikalnye.Contains(forWork[i])) unikalnye.Add(forWork[i]); // сохраняем уникальные значения из сортированного массива с прибылями
+            }
+
+            WriteLine();
+
+            // заполняем массив индексов положительных прибылей, если прибыль положительная, то записываем индекс, если нет - то записываем -1, чтобы потом было легко отделить
+            for (int i = 0; i < 12; i++)
+            {
                 if (profit[i] > 0)
                 {
-                    minsAndPositives[1, i] = forWork[i];
                     indexesPositives[i] = i;
                 }
                 else
                 {
-                    minsAndPositives[1, i] = 0;
+                    indexesPositives[i] = -1;
                 }
             }
 
-            //ищем индексы(месяцы) минимальных прибылей в массиве прибылей
-            for (int i = 0; i < 3; i++)
+            //ищем индексы(месяцы) минимальных прибылей в массиве прибылей, которые равны любому из трех минимальных значений прибыли
+            for (int i = 0; i < 12; i++)
             {
-                for (int j = 0; j < 12; j++)
+                if (unikalnye.Take(3).Contains(profit[i])) indexesMins[i] = i; // если значение прибыли содержится в выборке первых трех минимальных и уникальных значений, то сохраняем индекс
+                else
                 {
-                    if (profit[j] == minsAndPositives[0, i])
-                    {
-                        if (!indexesMins.Contains(j)) indexesMins[i] = j;
-                    }
+                    indexesMins[i] = -1; // если нет, то заполняем -1, чтобы потом было легко отобрать индексы
                 }
             }
 
 
-            string t4k = ""; // t4k - точка, сначала хотел ставить "." в конце строки, но в задании нет знака препинания в конце строки
-            Console.Write($"Худшая прибыль в месяцах: ");
+            string t4k = "";
+            Write($"Худшая прибыль в месяцах: ");
             Array.Sort(indexesMins);
-            for (int i = 0; i < 3; i++)
-            {
-                t4k = (i == 2) ? "" : ",";          // ждем последнее значение цикла, как оно наступает "," не ставим. пока ждем - ставим ","
-                Console.Write($"{indexesMins[i] + 1}{t4k}");
-            }
-            Console.WriteLine();
+            int minsCount = indexesMins.Where(v => v > 0).Count(); // определяем количество индексов(месяцев), в которых была минимальная прибыль
 
-            int positives = indexesPositives.Where(pos => pos > 0).Count(); // с помощью LINQ выбирается коллекция положительних прибылей
-            Console.Write($"Месяцев с положительной прибылью: {positives} (");
+            int iterator2 = 0;  // итератор по количеству индексов
+            for (int i = 0; i < 12; i++)
+            {
+                t4k = (iterator2 == minsCount || i == 11) ? "" : ",";   // ждем либо последнее значение цикла либо, итератор ставит равен количеству минимальных прибылей, как оно наступает, вместо запятой в конце строки ставим "". если условие не выполняется - ставим ","
+                if (indexesMins[i] >= 0) 
+                {
+                    Write($"{++indexesMins[i]}{t4k}");  // выводим индексы, предварительно увеличив их на 1 (из-за массива, где счет начинается с 0), минимальных прибылей
+                    iterator2++;                        // увеличиваем итератор
+                }
+            }
+            WriteLine();
+
+            int positives = indexesPositives.Where(pos => pos >= 0).Count(); // с помощью LINQ выбирается коллекция положительних прибылей
+            Write($"Месяцев с положительной прибылью: {positives} (");
             int value = 0;
-            foreach (var item in indexesPositives.Where(pos => pos > 0))
+            foreach (var item in indexesPositives.Where(pos => pos >= 0))
             {
                 t4k = (positives == 1) ? "" : ",";  // ждем последнее значение цикла, как оно наступает "," не ставим. пока ждем - ставим ","
                 value = item + 1;
-                Console.Write($"{value}{t4k}");
+                Write($"{value}{t4k}");
                 positives--;
             }
-            Console.WriteLine(")");
-            Console.ReadKey();
+            WriteLine(")");
+            ReadKey();
         }
 
 
@@ -376,7 +387,7 @@ namespace Homework_Theme_04
             {
                 count = 1;
             }
-            Console.WriteLine($"n = {count}");
+            WriteLine($"n = {count}");
             int n = 0, zadanie = count, elMaxLength = 0; // zadanie - переменная задает количество строк текущего треугольника, n - счетчик количества итераций внешнего цика, elMaxLength - максимальная длина в символах максимального элемента треугольника
             double[][] storage = new double[zadanie][]; // зубчатый массив хранения элементов треугольника. первое значение указывает количество строк, второе - количество элементов в строке
             int[] strLen = new int[zadanie];    // массив для хранения сумм длин всех элементов массива строки треугольника без пробелов
@@ -419,24 +430,24 @@ namespace Homework_Theme_04
                 {
                     int currentStringWithSpaces = (elMaxLength * (storage[i].Length - 1) + 1); // длина текущей строки, опеределяется как количество элементов в текущей строке минус 1 умножить на максимальную длину максимального элемента треугольника плюс один, потому что после последнего элемента не выводим пробелы
                     offset = maxStringLenghtWithSpaces / 2 - (currentStringWithSpaces / 2); // определяем сдвиг как половина длины максимально длинной строки - половина длины текущей строки
-                    Console.CursorLeft = offset; // сдвигаем курсов
+                    CursorLeft = offset; // сдвигаем курсов
                     for (int j = 0; j < storage[i].Length; j++) // цикл перебора элементов в строке
                     {
                         string tail = (j == (storage[i].Length - 1)) ? "" : new string('.', (elMaxLength - storage[i][j].ToString().Length)); // вычисляем "хвост" элемента, как разность длины элемента в символах и длины максимального элемента треугольника в символах. если элемент последний в строке, то хвоста нет
-                        Console.Write($"{storage[i][j]}{tail}"); // вывод элемента и "хвоста" (отступа до следующего элемента)
+                        Write($"{storage[i][j]}{tail}"); // вывод элемента и "хвоста" (отступа до следующего элемента)
                     }
-                    Console.WriteLine();
+                    WriteLine();
                 }
                 catch (Exception)
                 {
                     // элемент введен, чтобы ловить ошибку слишком большого сдвига, который вызывал ошибку переполнения буфера вывода консоли
-                    //Console.WriteLine("максимальная длина строки:{0}", maxStringLenghtWithSpaces);
-                    //Console.WriteLine("отступ:{0}", offset);
+                    //WriteLine("максимальная длина строки:{0}", maxStringLenghtWithSpaces);
+                    //WriteLine("отступ:{0}", offset);
                 }
 
             }
-            Console.WriteLine();
-            Console.ReadKey();
+            WriteLine();
+            ReadKey();
             CountPascalTreangle(++zadanie); // перезапуск метода с количеством шагов + 1 к предыдущему значению
         }
 
