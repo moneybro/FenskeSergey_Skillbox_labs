@@ -63,7 +63,7 @@ namespace Homework_Theme_04
             // Худшая прибыль в месяцах: 7, 4, 1, 5, 12
             // Месяцев с положительной прибылью: 10
             #endregion
-            Task1_FinancialAccounting();
+            //Task1_FinancialAccounting();
 
             #region Задание 2. Треугольник Паскаля
             // * Задание 2
@@ -134,6 +134,7 @@ namespace Homework_Theme_04
             //  |  5  3  1  |   |  3  6  7  |   |  2  -3  -6  |
             //
             #endregion
+            additionAndSubtractionMatrixes();
 
             #region Задание 3.3. Перемножение матриц
             // *** Задание 3.3
@@ -154,6 +155,8 @@ namespace Homework_Theme_04
             //                  | 6 |  
             //
             #endregion
+            //multiplicationMatrix();
+
         }
 
         #region Вопрос по вычислениям переменных типа float (код)
@@ -383,6 +386,7 @@ namespace Homework_Theme_04
         /// <param name="count">Параметр задает первичное количество строк N треугольника</param>
         static void CountPascalTreangle(int count)
         {
+            WriteLine("Задание 2. Треугольник Паскаля.");
             if (count == 0)
             {
                 count = 1;
@@ -462,6 +466,7 @@ namespace Homework_Theme_04
             int arrStringItemsCount, arrColumnsCount, multiplier, multiplierCharsCount, randomLimit;
             int[,] sourceArr, targetArr;
             string el;
+            WriteLine("Задание 3.1. Умножение матрицы на число");
             WriteLine("Введите количество строк матрицы (можно много): ");
             arrStringItemsCount = getValidIntFromLine();
             WriteLine("Введите количество столбцов матрицы (желательно не очень много, чтобы за экран не убегало): ");
@@ -606,6 +611,442 @@ namespace Homework_Theme_04
             }
         }
 
+        #endregion
+
+        #region Задание 3.2. Сложение и вычитание матриц (реализация)
+        static void additionAndSubtractionMatrixes()
+        {
+            Clear();
+            WriteLine("Задание 3.2. Сложение и вычитание матриц");
+            int arrLineItemsCount, arrColumnsCount, action, randomLimit, maxResElementWidth, maxResElement = 0, sourceMatrixColumnWidth;
+            int[,] sourceArr1, sourceArr2, targetArr;
+            string el, actionTxt = "";
+            bool maxElIsNegative = false;
+
+
+            WriteLine("Введите количество строк матрицы (можно много): ");
+            arrLineItemsCount = getValidIntFromLine();
+            WriteLine("Введите количество столбцов матрицы (желательно не очень много, чтобы за экран не убегало): ");
+            arrColumnsCount = getValidIntFromLine();
+            WriteLine("Введите действие над матрицами (1 - сложение, 2 - вычитание): ");
+            while (true)
+            {
+                action = getValidIntFromLine();
+                if (action == 1 || action == 2) break;
+            }
+            WriteLine("Введите лимит рандомайзера (от - лимит до лимит): ");
+            randomLimit = getValidIntFromLine();
+
+
+
+            WriteLine();
+            int sleepTime = 000;
+            //arrLineItemsCount = 10;
+            //arrColumnsCount = 3;
+            //randomLimit = 5000;
+            //action = 1;
+
+            switch (action)
+            {
+                case 1:
+                    actionTxt = "сложение";
+                    break;
+                case 2:
+                    actionTxt = "вычитание";
+                    break;
+            }
+
+            WriteLine($"Размер массива: строк={arrLineItemsCount} столбцов={arrColumnsCount}. Действие={actionTxt}. Лимит(-{randomLimit}, {randomLimit})");
+            WriteLine();
+            sourceArr1 = new int[arrLineItemsCount, arrColumnsCount];
+            sourceArr2 = new int[arrLineItemsCount, arrColumnsCount];
+            targetArr = new int[arrLineItemsCount, arrColumnsCount];
+
+            Random random = new Random();
+
+            // заполнение матриц, определение максимального элемента в рез-щей матрице, чтобы потом взять его длину в символах
+            for (int i = 0; i < arrLineItemsCount; i++)
+            {
+                for (int j = 0; j < arrColumnsCount; j++)
+                {
+                    //sourceArr1[i, j] = -10;
+                    //sourceArr2[i, j] = -10;
+                    sourceArr1[i, j] = random.Next(-randomLimit, randomLimit);
+                    sourceArr2[i, j] = random.Next(-randomLimit, randomLimit);
+
+                    targetArr[i, j] = action == 1 ? sourceArr1[i, j] + sourceArr2[i, j] : sourceArr1[i, j] - sourceArr2[i, j];
+
+                    if (maxResElement < Math.Abs(targetArr[i, j]))   // максимальное число по модулю
+                    {
+                        maxResElement = Math.Abs(targetArr[i, j]);  // запоминаем максимальное число
+                        maxElIsNegative = true;                     // максимальное число по модулю было отрицательным
+                    }
+                }
+            }
+
+            maxResElementWidth = maxElIsNegative ? maxResElement.ToString().Length + 2 : maxResElement.ToString().Length + 1;   // длина в символах максимального элемента рез-щего массива и если элемент был отрицательный, то добавляем к длине 1 для знака. также один знак для пробела
+            sourceMatrixColumnWidth = randomLimit.ToString().Length + 2; // длина максимального случайного элемента в символах
+            string separator1, separator2; // разделитель выводит действие над матрицами
+            separator1 = action == 1 ? " + " : " - ";
+
+            // вывод матриц
+            for (int i = 0; i < arrLineItemsCount; i++)
+            {
+                int matrix1Width = 2 + arrColumnsCount * sourceMatrixColumnWidth + 1; // 2- для "| ", потом количество столбцов на максимальную длину элемента + знак + пробел (4 - потому что числа выбираются из диапазона от -10 до 10, то есть максимальная длина - 2, + знак + пробел)
+                int matrix2Offset = matrix1Width + separator1.Length;
+                int matrix3Offset = matrix1Width * 2 + separator1.Length * 2;
+
+                if (i != arrLineItemsCount / 2)
+                {
+                    separator1 = separator2 = new string(' ', separator1.Length);
+                }
+                else
+                {
+                    separator1 = action == 1 ? " + " : " - ";
+                    separator2 = " = ";
+                }
+
+                for (int j = 0; j < arrColumnsCount; j++)
+                {
+                    try
+                    {
+                        string openSkobka = (j == 0) ? "| " : "";
+                        string closeSkobka = (j == (arrColumnsCount - 1)) ? "|" : "";
+
+                        Write(openSkobka); // вывод открывающей скобки
+
+                        el = (sourceArr1[i, j] >= 0 ? " " + sourceArr1[i, j].ToString() : sourceArr1[i, j].ToString());
+
+                        CursorLeft = 2 + j * sourceMatrixColumnWidth;       // отступ для очередного элемента строки массива
+                        Write(el);
+                        CursorLeft = matrix1Width - 1; // минус 1 потому что ширина матрицы учитывает закрывающую скобку и чтобы ее нарисовать возвращаемся на 1 символ назад
+                        Write(closeSkobka);
+                        Thread.Sleep(sleepTime);
+
+                        Write(separator1);    // вывод действия над матрицей
+
+                        Thread.Sleep(sleepTime);
+                    
+                        CursorLeft = matrix2Offset;
+                        Write(openSkobka); // "( "
+                        CursorLeft = matrix2Offset + 2 + sourceMatrixColumnWidth * j;
+
+                        el = (sourceArr2[i, j] >= 0 ? " " + sourceArr2[i, j].ToString() : sourceArr2[i, j].ToString());
+                        Write(el);  // вывод исходного массива 2
+
+                        CursorLeft = matrix2Offset + matrix1Width -1;
+                        Write(closeSkobka);
+                        Write(separator2);    // вывод " = "
+                        Thread.Sleep(sleepTime);
+
+                    
+                    
+                        CursorLeft = matrix3Offset;
+                        Write(openSkobka);
+                        CursorLeft = matrix3Offset + arrColumnsCount * maxResElementWidth + 2;
+                        Write(closeSkobka);
+                        CursorLeft = matrix3Offset + 2 + j *maxResElementWidth;
+                        el = (targetArr[i, j] >= 0 ? " " + targetArr[i, j].ToString() : targetArr[i, j].ToString()); // если элемент положительный, то вместо знака добавляем пробел
+
+                    Write(el);  // вывод вертикальной скобки и элемента рез-щей матрицы
+                    }
+                    catch
+                    {
+                        // что-нибудь
+                    }
+                    
+                    Thread.Sleep(sleepTime);
+                }
+                try
+                {
+                    CursorLeft = matrix3Offset + arrColumnsCount * (maxResElementWidth) + 1;    // отступ для отрисовки закрывающей вертикальной скобки рез-щей матрицы
+                }
+                catch
+                {
+                    // защита от ошибки если вдруг матрицы будут слишком большие и сдвиг будет больше ширины окна консоли
+                }
+                WriteLine();
+            }
+
+            ReadKey();
+            additionAndSubtractionMatrixes();
+        }
+        #endregion
+
+        #region Задание 3.3. Перемножение матриц (реализация)
+        static void multiplicationMatrix()
+        {
+            Clear();
+            WriteLine("Задание 3.3. Перемножение матриц");
+            int arrLinesCount1, arrColumnsCount1, arrLinesCount2, arrColumnsCount2;
+
+
+
+
+            int randomLimit, maxResElementWidth, maxResElement = 0, sourceMatrixColumnWidth, arrPlaceWidth, arrPlaceHeight;
+            int[,] sourceArr1, sourceArr2, targetArr;
+            string el;
+
+
+            WriteLine("Введите количество строк матрицы А: ");
+            arrLinesCount1 = getValidIntFromLine();
+            WriteLine("Введите количество столбцов матрицы");
+            arrColumnsCount1 = getValidIntFromLine();
+
+            while (true)
+            {
+                WriteLine("Введите количество строк матрицы B: ");
+                arrLinesCount2 = getValidIntFromLine();
+                if (arrColumnsCount1 != arrLinesCount2)
+                {
+                    WriteLine("Количество столбцов матрицы А должно быть равно количеству строк матрицы В.");
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            WriteLine("Введите количество столбцов матрицы");
+            arrColumnsCount2 = getValidIntFromLine();
+
+            WriteLine("Введите лимит рандомайзера (от - лимит до лимит): ");
+            randomLimit = getValidIntFromLine();
+
+            WriteLine();
+            int sleepTime = 000;
+
+            // использовалось для отладки, чтобы не вводить размерности постоянно
+            //arrLinesCount1 = 2;
+            //arrColumnsCount1 = 4;
+
+            //arrLinesCount2 = 4;
+            //arrColumnsCount2 = 5;
+
+            //randomLimit = 30;
+
+            WriteLine($"Массив А: строк = {arrLinesCount1}, столбцов = {arrColumnsCount1}");
+            WriteLine($"Массив B: строк = {arrLinesCount2}, столбцов = {arrColumnsCount2}");
+            WriteLine($"Результирующий массив : строк = {arrLinesCount1}, столбцов = {arrColumnsCount2}");
+            WriteLine($"Лимит рандомайзера: (-{randomLimit}, {randomLimit})");
+            WriteLine();
+
+            // инициализируем исходные матрицы и заполняем их значениями
+            sourceArr1 = getFilledArray(arrLinesCount1, arrColumnsCount1, randomLimit);
+            sourceArr2 = getFilledArray(arrLinesCount2, arrColumnsCount2, randomLimit);
+
+            // инициализируем рез-щую матрицу
+            targetArr = new int[arrLinesCount1, arrColumnsCount2];
+            //sourceArr1 = new int[,] { { 1, 2, 3 }, { 4, 5, 6 } };
+            //sourceArr2 = new int[,] { { 7, 8 }, { 9, 10 }, { 11, 12 } };
+
+            // определяем размеры мест для расположения матриц, по максимальным значениям количеств строк и столбцов исходных матриц
+            arrPlaceWidth = arrColumnsCount1 > arrColumnsCount2 ? arrColumnsCount1 : arrColumnsCount2;
+            arrPlaceHeight = arrLinesCount1 > arrLinesCount2 ? arrLinesCount1 : arrLinesCount2;
+
+            /// перемножение, википедия помогла
+            for (int i = 0; i < targetArr.GetLength(0); i++)
+            {
+                for (int j = 0; j < targetArr.GetLength(1); j++)
+                {
+                    for (int k = 0; k < sourceArr1.GetLength(1); k++)
+                    {
+                        targetArr[i,j] += sourceArr1[i, k] * sourceArr2[k, j];
+                        //Write($"{sourceArr1[i,k]} * {sourceArr2[k,j]} + "); // использовалось для отладки, для проверки правильности умножений и сложений
+                    }
+                    //WriteLine($" = {targetArr[i, j]}");
+                }
+            }
+
+            // использовалось для отладки, вывод исходных матриц без форматирования в троку
+            //WriteLine();
+            //printArr(sourceArr1);
+            //printArr(sourceArr2);
+            //printArr(targetArr);
+
+            // определение максимального элемента в рез-щей матрице, чтобы потом взять его длину в символах
+            for (int i = 0; i < targetArr.GetLength(0); i++)
+            {
+                for (int j = 0; j < targetArr.GetLength(1); j++)
+                {
+                    if (maxResElement < Math.Abs(targetArr[i, j]))   // максимальное число по модулю
+                    {
+                        maxResElement = Math.Abs(targetArr[i, j]);  // запоминаем максимальное число
+                    }
+                }
+            }
+
+            maxResElementWidth = maxResElement.ToString().Length + 2;   // длина в символах максимального элемента рез-щего массива + знак + один отступ в конце
+            sourceMatrixColumnWidth = randomLimit.ToString().Length + 2; // длина максимального элемента в символах исходной матрицы
+            string separator1, separator2; // разделитель выводит действие над матрицами
+            separator1 = " * ";
+            separator2 = " = ";
+
+            /// ------------- ///
+            /// вывод матриц
+            /// ------------- ///
+
+            int matrix1Width = 2 + arrColumnsCount1 * sourceMatrixColumnWidth + 1; // 2- для "| ", потом количество столбцов на максимальную длину элемента + знак + пробел (4 - потому что числа выбираются из диапазона от -10 до 10, то есть максимальная длина - 2, + знак + пробел)
+            int matrix2Width = 2 + arrColumnsCount2 * sourceMatrixColumnWidth + 1;
+
+            int matrix2Offset = matrix1Width + separator1.Length;                       // отступ до 2й матрицы
+            int matrix3Offset = matrix1Width + separator1.Length + matrix2Width + separator2.Length;    // отступ до 3й матрицы
+            
+            for (int i = 0; i < arrPlaceHeight; i++)
+            {
+                //вывод разделителей матриц
+                if (i != arrPlaceHeight / 2)
+                {
+                    separator1 = separator2 = new string(' ', separator1.Length);
+                }
+                else
+                {
+                    separator1 = " * ";
+                    separator2 = " = ";
+                }
+
+                for (int j = 0; j < arrPlaceWidth; j++)
+                {
+                    try
+                    {
+                        string openSkobka = (j == 0) ? "| " : ""; 
+                        string closeSkobka = (j == (arrColumnsCount1 - 1)) ? "|" : "";
+
+                        // вывод исходной матрицы 1
+                        if (i < sourceArr1.GetLength(0) && j < sourceArr1.GetLength(1)) // если места под матрицу отведено больше, чем ее размер, то проверяем чтобы индексы не становились больше размера обрабатываемого массива. проверяем по количеству строк и столбцов
+                        {
+                            CursorTop = CursorTop + (arrPlaceHeight - sourceArr1.GetLength(0)) / 2; // сдвигаем матрицу ниже, если количество строк в ней меньше , чем отведено
+                            Write(openSkobka); // вывод открывающей скобки
+                            el = (sourceArr1[i, j] >= 0 ? " " + sourceArr1[i, j].ToString() : sourceArr1[i, j].ToString()); // добавляем знак элементу матрицы
+                            CursorLeft = 2 + j * sourceMatrixColumnWidth;       // отступ для очередного элемента строки массива
+                            Write(el);
+                            CursorLeft = matrix1Width - 1; // минус 1 потому что ширина матрицы учитывает закрывающую скобку и чтобы ее нарисовать возвращаемся на 1 символ назад
+                            Write(closeSkobka); // вывод закрывающей скобки
+                            CursorTop = CursorTop - (arrPlaceHeight - sourceArr1.GetLength(0)) / 2; // возвращаем курсов на строку консоли выше, откуда спускались
+                        }                        
+
+                        Thread.Sleep(sleepTime);
+
+                        CursorLeft = matrix1Width;      // сдвигаем курсов для отображения символа действия над матрицами
+                        Write(separator1);              // вывод действия над матрицей
+
+                        Thread.Sleep(sleepTime);
+
+                        // вывод исходной матрицы 2
+                        if (i < sourceArr2.GetLength(0) && j < sourceArr2.GetLength(1))
+                        {
+                            CursorTop = CursorTop + (arrPlaceHeight - sourceArr2.GetLength(0)) / 2;
+                            CursorLeft = matrix2Offset;
+                            Write(openSkobka); // "( "
+                            CursorLeft = matrix2Offset + 2 + sourceMatrixColumnWidth * j;
+                            el = (sourceArr2[i, j] >= 0 ? " " + sourceArr2[i, j].ToString() : sourceArr2[i, j].ToString());
+                            Write(el);  // вывод исходного массива 2
+                            CursorLeft = matrix2Offset + matrix2Width - 1;
+                            closeSkobka = (j == (arrColumnsCount2 - 1)) ? "|" : "";
+                            Write(closeSkobka);
+                            CursorTop = CursorTop - (arrPlaceHeight - sourceArr2.GetLength(0)) / 2;
+                        }
+
+                        CursorLeft = matrix1Width + separator1.Length + matrix2Width;
+                        Write(separator2);    // вывод " = "
+
+                        // для отладки
+                        Thread.Sleep(sleepTime);
+
+                        // вывод рез-щей матрицы
+                        if (i < targetArr.GetLength(0) && j < targetArr.GetLength(1))
+                        {
+                            CursorTop = CursorTop + (arrPlaceHeight - targetArr.GetLength(0)) / 2;
+                            CursorLeft = matrix3Offset;
+                            Write(openSkobka);
+                            
+                            CursorLeft = matrix3Offset + 2 + j * maxResElementWidth;
+                            el = (targetArr[i, j] >= 0 ? " " + targetArr[i, j].ToString() : targetArr[i, j].ToString()); // если элемент положительный, то вместо знака добавляем пробел
+                            Write(el);  // вывод элемента рез-щей матрицы
+                            CursorLeft = matrix3Offset + targetArr.GetLength(1) * maxResElementWidth + 2;
+                            closeSkobka = (j == (targetArr.GetLength(1) - 1)) ? "|" : "";
+                            Write(closeSkobka);
+                            CursorTop = CursorTop - (arrPlaceHeight - targetArr.GetLength(0)) / 2;
+                        }
+                    }
+                    catch
+                    {
+                        // что-нибудь
+                    }
+
+                    Thread.Sleep(sleepTime);
+                }
+                try
+                {
+                    CursorLeft = matrix3Offset + arrColumnsCount1 * maxResElementWidth + 1;    // отступ для отрисовки закрывающей вертикальной скобки рез-щей матрицы
+                }
+                catch
+                {
+                    // защита от ошибки если вдруг матрицы будут слишком большие и сдвиг будет больше ширины окна консоли
+                }
+                WriteLine();
+            }
+            ReadKey();
+            multiplicationMatrix();
+        }
+
+        #region вспомогательные методы
+
+        /// <summary>
+        /// метод для создания массива(матрицы) и заполнения ее значениями
+        /// </summary>
+        /// <param name="lines">количество строк в матрице</param>
+        /// <param name="cols">количество столбцов в матрице</param>
+        /// <param name="randLimit">значение рандомайзера (-randLimit, randLimit)</param>
+        /// <returns></returns>
+        static int[,] getFilledArray(int lines, int cols, int randLimit)
+        {
+            int[,] resArr = new int[lines, cols];
+            Random random = new Random();
+            for (int i = 0; i < lines; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    resArr[i, j] = random.Next(-randLimit, randLimit);
+                }
+            }
+            return resArr;
+        }
+
+        /// <summary>
+        /// метод применялся для отладки, для быстрого вывода массива(матрицы)
+        /// </summary>
+        /// <param name="arr">матрица для отображения</param>
+        static void printArr(int[,] arr)
+        {
+            int max = 0;
+            for (int i = 0; i < arr.GetLength(0); i++)
+            {
+                for (int j = 0; j < arr.GetLength(1); j++)
+                {
+                    if (max < Math.Abs(arr[i, j]))   // максимальное число по модулю
+                    {
+                        max = Math.Abs(arr[i, j]);  // запоминаем максимальное число
+                    }
+                }
+            }
+
+            int maxElWidth = max.ToString().Length + 2;
+            for (int i = 0; i < arr.GetLength(0); i++)
+            {
+                Write("| ");
+                for (int j = 0; j < arr.GetLength(1); j++)
+                {
+                    CursorLeft = 2 + maxElWidth * j;
+                    string znak = arr[i, j] > 0 ? " " : "";
+                    Write(znak + arr[i, j]);
+                }
+                CursorLeft = 2 + maxElWidth * arr.GetLength(1);
+                WriteLine("|");
+            }
+            WriteLine(new string('-', WindowWidth));
+        }
+        #endregion
         #endregion
     }
 }
