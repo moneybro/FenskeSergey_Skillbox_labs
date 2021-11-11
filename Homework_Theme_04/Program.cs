@@ -63,8 +63,7 @@ namespace Homework_Theme_04
             // Худшая прибыль в месяцах: 7, 4, 1, 5, 12
             // Месяцев с положительной прибылью: 10
             #endregion
-            //Task1_FinancialAccounting();
-
+            
             #region Задание 2. Треугольник Паскаля
             // * Задание 2
             // Заказчику требуется приложение строящее первых N строк треугольника паскаля. N < 25
@@ -92,8 +91,7 @@ namespace Homework_Theme_04
             // 
             // Справка: https://ru.wikipedia.org/wiki/Треугольник_Паскаля
             #endregion
-            //CountPascalTreangle(9);
-
+            
             #region Задание 3.1. Умножение матрицы на число.
             // 
             // * Задание 3.1
@@ -112,8 +110,7 @@ namespace Homework_Theme_04
             //      |  5  3  1  |   | 25  15   5  |
             //
             #endregion
-            //matrixMultiplicationByNumber();
-
+            
             #region Задание 3.2. Сложение и вычитание матриц
             // ** Задание 3.2
             // Заказчику требуется приложение позволяющщее складывать и вычитать математические матрицы
@@ -134,8 +131,7 @@ namespace Homework_Theme_04
             //  |  5  3  1  |   |  3  6  7  |   |  2  -3  -6  |
             //
             #endregion
-            additionAndSubtractionMatrixes();
-
+            
             #region Задание 3.3. Перемножение матриц
             // *** Задание 3.3
             // Заказчику требуется приложение позволяющщее перемножать математические матрицы
@@ -155,8 +151,46 @@ namespace Homework_Theme_04
             //                  | 6 |  
             //
             #endregion
-            //multiplicationMatrix();
+            
+            startApp();
+        }
 
+        /// <summary>
+        /// меню
+        /// </summary>
+        static void startApp()
+        {
+            Clear();
+            WriteLine("Тема 4. Выберете задание:");
+            WriteLine("1 - Финансовый учет. Task1_FinancialAccounting");
+            WriteLine("2 - Треугольник Паскаля");
+            WriteLine("3 - Задание 3.1. Умножение матрицы на число.");
+            WriteLine("4 - Задание 3.2. Сложение и вычитание матриц");
+            WriteLine("5 - Задание 3.3. Перемножение матриц");
+            var choos = ReadKey().KeyChar;
+            switch (choos)
+            {
+                case '1':
+                    Task1_FinancialAccounting();
+                    break;
+                case '2':
+                    CountPascalTreangle(9);
+                    break;
+                case '3':
+                    matrixMultiplicationByNumber();
+                    break;
+                case '4':
+                    additionAndSubtractionMatrixes();
+                    break;
+                case '5':
+                    multiplicationMatrix();
+                    break;
+                default:
+                    WriteLine("Неверный ввод. Повторите.");
+                    ReadKey();
+                    startApp();
+                    break;
+            }
         }
 
         #region Вопрос по вычислениям переменных типа float (код)
@@ -234,6 +268,7 @@ namespace Homework_Theme_04
             int[] indexesMins = new int[12];         // индексы (месяцы) минимумов
             int[] indexesPositives = new int[12];   // индексы доходных месяце
 
+            Clear();
             WriteLine("Задание 1. Финансовый учет.");
             WriteLine("Выберете вариант отчета:");
             WriteLine("1 - Данные из задания (по умолчанию)");
@@ -333,6 +368,7 @@ namespace Homework_Theme_04
             }
             WriteLine(")");
             ReadKey();
+            startApp();
         }
 
 
@@ -386,6 +422,7 @@ namespace Homework_Theme_04
         /// <param name="count">Параметр задает первичное количество строк N треугольника</param>
         static void CountPascalTreangle(int count)
         {
+            Clear();
             WriteLine("Задание 2. Треугольник Паскаля.");
             if (count == 0)
             {
@@ -452,7 +489,7 @@ namespace Homework_Theme_04
             }
             WriteLine();
             ReadKey();
-            CountPascalTreangle(++zadanie); // перезапуск метода с количеством шагов + 1 к предыдущему значению
+            startApp();
         }
 
 
@@ -468,13 +505,13 @@ namespace Homework_Theme_04
             string el;
             WriteLine("Задание 3.1. Умножение матрицы на число");
             WriteLine("Введите количество строк матрицы (можно много): ");
-            arrStringItemsCount = getValidIntFromLine();
+            arrStringItemsCount = getValidIntFromLine(true);
             WriteLine("Введите количество столбцов матрицы (желательно не очень много, чтобы за экран не убегало): ");
-            arrColumnsCount = getValidIntFromLine();
+            arrColumnsCount = getValidIntFromLine(true);
             WriteLine("Введите множитель матрицы: ");
             multiplier = getValidIntFromLine();
             WriteLine("Введите лимит рандомайзера (от - лимит до лимит): ");
-            randomLimit = getValidIntFromLine();
+            randomLimit = getValidIntFromLine(true);
             WriteLine();
             //arrStringItemsCount = 5;
             //arrColumnsCount = 5;
@@ -575,14 +612,19 @@ namespace Homework_Theme_04
             }
 
             ReadKey();
-            matrixMultiplicationByNumber();
+            startApp();
         }
 
         /// <summary>
         /// Метод предназначен для обеспечения валидности ввода целочисленных значений
         /// </summary>
         /// <returns></returns>
+
         static int getValidIntFromLine()
+        {
+            return getValidIntFromLine(false);
+        }
+        static int getValidIntFromLine(bool onlyPositives)
         {
             int result;
             bool needClean = false;
@@ -590,19 +632,21 @@ namespace Homework_Theme_04
             {
                 string enter = ReadLine();
                 bool success = int.TryParse(enter, out result);
-                if (success)
+                if ((success && result > 0) ||
+                    (success && result > 0 && onlyPositives) ||
+                    (success && result <= 0 && !onlyPositives))
                 {
-                    if (needClean)
-                    {
-                        SetCursorPosition(0, CursorTop);
-                        Write(new string(' ', WindowWidth));
-                        SetCursorPosition(0, --CursorTop);
-                    }
-                    return result;
+                        if (needClean)
+                        {
+                            SetCursorPosition(0, CursorTop);
+                            Write(new string(' ', WindowWidth));
+                            SetCursorPosition(0, --CursorTop);
+                        }
+                        return result;
                 }
                 else
                 {
-                    Write("Неверный ввод. Повторите");
+                    Write("Неверный ввод. Повторите.");
                     SetCursorPosition(0,--CursorTop);
                     Write(new string(' ', WindowWidth));
                     SetCursorPosition(0, --CursorTop);
@@ -625,19 +669,25 @@ namespace Homework_Theme_04
 
 
             WriteLine("Введите количество строк матрицы (можно много): ");
-            arrLineItemsCount = getValidIntFromLine();
+            arrLineItemsCount = getValidIntFromLine(true);
             WriteLine("Введите количество столбцов матрицы (желательно не очень много, чтобы за экран не убегало): ");
-            arrColumnsCount = getValidIntFromLine();
+            arrColumnsCount = getValidIntFromLine(true);
             WriteLine("Введите действие над матрицами (1 - сложение, 2 - вычитание): ");
             while (true)
             {
-                action = getValidIntFromLine();
+                action = getValidIntFromLine(true);
                 if (action == 1 || action == 2) break;
+                else 
+                {
+                    WriteLine("Неверный ввод. Повторите.");
+                    CursorTop -= 2;
+                    Write(new string(' ', WindowWidth));
+                    CursorTop -= 1;
+                    CursorLeft = 0;
+                };
             }
             WriteLine("Введите лимит рандомайзера (от - лимит до лимит): ");
-            randomLimit = getValidIntFromLine();
-
-
+            randomLimit = getValidIntFromLine(true);
 
             WriteLine();
             int sleepTime = 000;
@@ -769,7 +819,7 @@ namespace Homework_Theme_04
             }
 
             ReadKey();
-            additionAndSubtractionMatrixes();
+            startApp();
         }
         #endregion
 
@@ -780,23 +830,20 @@ namespace Homework_Theme_04
             WriteLine("Задание 3.3. Перемножение матриц");
             int arrLinesCount1, arrColumnsCount1, arrLinesCount2, arrColumnsCount2;
 
-
-
-
             int randomLimit, maxResElementWidth, maxResElement = 0, sourceMatrixColumnWidth, arrPlaceWidth, arrPlaceHeight;
             int[,] sourceArr1, sourceArr2, targetArr;
             string el;
 
 
             WriteLine("Введите количество строк матрицы А: ");
-            arrLinesCount1 = getValidIntFromLine();
+            arrLinesCount1 = getValidIntFromLine(true);
             WriteLine("Введите количество столбцов матрицы");
-            arrColumnsCount1 = getValidIntFromLine();
+            arrColumnsCount1 = getValidIntFromLine(true);
 
             while (true)
             {
                 WriteLine("Введите количество строк матрицы B: ");
-                arrLinesCount2 = getValidIntFromLine();
+                arrLinesCount2 = getValidIntFromLine(true);
                 if (arrColumnsCount1 != arrLinesCount2)
                 {
                     WriteLine("Количество столбцов матрицы А должно быть равно количеству строк матрицы В.");
@@ -808,10 +855,10 @@ namespace Homework_Theme_04
             }
 
             WriteLine("Введите количество столбцов матрицы");
-            arrColumnsCount2 = getValidIntFromLine();
+            arrColumnsCount2 = getValidIntFromLine(true);
 
             WriteLine("Введите лимит рандомайзера (от - лимит до лимит): ");
-            randomLimit = getValidIntFromLine();
+            randomLimit = getValidIntFromLine(true);
 
             WriteLine();
             int sleepTime = 000;
@@ -987,7 +1034,7 @@ namespace Homework_Theme_04
                 WriteLine();
             }
             ReadKey();
-            multiplicationMatrix();
+            startApp();
         }
 
         #region вспомогательные методы
